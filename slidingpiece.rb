@@ -11,9 +11,12 @@ module slidingpiece
     result
   end
 
+ #when calling grow_unblocked_moves_in_dir, make sure that
+ #the initial position is valid_move.
   def grow_unblocked_moves_in_dir(dx,dy)
-    x_coord = self.pos[0]
-    y_coord = self.pos[1]
+    init = self.pos
+    x_coord = self.pos[0]+dx
+    y_coord = self.pos[1]+dy
     xysave = [x_coord,y_coord]
     psmoves = []
     while valid_pos?(xysave) && empty?(xysave)
@@ -21,7 +24,21 @@ module slidingpiece
       xysave[0] += dx
       xysave[1] += dy
     end
-    psmoves.shift
+
+    while valid_pos?(xysasve)
+      if empty?(xysave)
+        psmoves << xysave
+        xysave[0] += dx
+        xysave[1] += dy
+      elsif self[xysave].color != initial.color
+        psmoves << xysave
+        break
+      else
+        break
+      end
+    end  
+    return psmoves
+
   end
 
 end
